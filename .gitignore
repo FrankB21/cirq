@@ -1,0 +1,7 @@
+# VSCode folder
+.vscode/
+
+# Build files
+**bin/
+**obj/
+**lib/
