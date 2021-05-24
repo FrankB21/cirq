@@ -59,6 +59,30 @@ bool cirq_enqueue(cirq_queue_t *q, void *element);
 void *cirq_dequeue(cirq_queue_t *q);
 
 /**
+ * @brief Check if the queue q is empty
+ * 
+ * @param q The queue to check
+ * @return bool Whether the queue is empty or not
+ */
+bool cirq_isempty(const cirq_queue_t *q);
+
+/**
+ * @brief Check if the queue q is full
+ * 
+ * @param q The queue to check
+ * @return bool Whether the queue is full or not
+ */
+bool cirq_isfull(const cirq_queue_t *q);
+
+/**
+ * @brief Get the amount of elements in the queue q
+ * 
+ * @param q The queue to check
+ * @return size_t The amount of elements currently enqueued
+ */
+size_t cirq_count(const cirq_queue_t *q);
+
+/**
  * @brief Destroy the queue q
  * @note This does NOT free the element pointers
  * @param q The queue to act upon

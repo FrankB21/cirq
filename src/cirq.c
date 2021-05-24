@@ -54,8 +54,7 @@ cirq_queue_t *cirq_create(size_t max_size)
 
 bool cirq_enqueue(cirq_queue_t *q, void *element)
 {
-    // Check if spot is occupied (queue full)
-    if (q->data[q->tail] != NULL) return false;
+    if (cirq_isfull(q)) return false;
 
     q->data[q->tail++] = element;
     if (q->tail >= q->max_size) q->tail = 0;
@@ -64,14 +63,35 @@ bool cirq_enqueue(cirq_queue_t *q, void *element)
 
 void *cirq_dequeue(cirq_queue_t *q)
 {
-    // Check if queue is empty
-    if (q->head == q->tail && q->data[q->head] == NULL) return NULL;
+    if (cirq_isempty(q)) return NULL;
 
     void *tmp = q->data[q->head];
 
     q->data[q->head++] = NULL;
     if (q->head >= q->max_size) q->head = 0;
     return tmp;
+}
+
+bool cirq_isempty(const cirq_queue_t *q)
+{
+    return q->head == q->tail && q->data[q->head] == NULL;
+}
+
+bool cirq_isfull(const cirq_queue_t *q)
+{
+    return q->data[q->tail] != NULL;
+}
+
+size_t cirq_count(const cirq_queue_t *q)
+{
+    const long h = (long)q->head;
+    const long t = (long)q->tail;
+
+    // Early exit if queue is full because full and empty queues
+    // would yield zero size with (tail - head)
+    if (cirq_isfull(q)) return q->max_size;
+    
+    return (size_t)labs(t - h);
 }
 
 void cirq_destroy(cirq_queue_t *q)
